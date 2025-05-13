@@ -83,25 +83,17 @@ determineQuadrantAngle angle angleType
 
 findReferenceAngle :: Double -> AngleType -> Double
 findReferenceAngle angle angleType
-  | angleType == InDegrees =
-      if a <= 90
-        then a
-        else
-          if a <= 180
-            then 180 - a
-            else
-              if a <= 270
-                then a - 180
-                else 360 - a
-  | angleType == InRadians =
-      if a <= pi / 2
-        then a
-        else
-          if a <= pi
-            then pi - a
-            else
-              if a <= 3 * pi / 2
-                then a - pi
-                else 2 * pi - a
+  | angleType == InDegrees = case determineQuadrantAngleDegrees angle of
+      Q1 -> normalized
+      Q2 -> 180 - normalized
+      Q3 -> normalized - 180
+      Q4 -> 360 - normalized
+      _ -> 0
+  | angleType == InRadians = case determineQuadrantAngleRadians angle of
+      Q1 -> normalized
+      Q2 -> pi - normalized
+      Q3 -> normalized - pi
+      Q4 -> 2 * pi - normalized
+      _ -> 0
   where
-    a = normalizeAngle angle angleType
+    normalized = normalizeAngle angle angleType

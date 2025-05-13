@@ -13,3 +13,4 @@ main = do
   print (determineQuadrantPoint (Point (-4) 4)) -- should print Q2 (Quadrant II)
   print (determineQuadrantAngle (pi / 2) InRadians) -- should print OnYAxis
   print (findReferenceAngle (-(pi / 4)) InRadians) -- should print pi / 4
+  print (findReferenceAngle 170 InDegrees) -- should print 10
