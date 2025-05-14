@@ -83,13 +83,13 @@ determineQuadrantAngle angle angleType
 
 findReferenceAngle :: Double -> AngleType -> Double
 findReferenceAngle angle angleType
-  | angleType == InDegrees = case determineQuadrantAngleDegrees angle of
+  | angleType == InDegrees = case determineQuadrantAngle angle angleType of
       Q1 -> normalized
       Q2 -> 180 - normalized
       Q3 -> normalized - 180
       Q4 -> 360 - normalized
       _ -> 0
-  | angleType == InRadians = case determineQuadrantAngleRadians angle of
+  | angleType == InRadians = case determineQuadrantAngle angle angleType of
       Q1 -> normalized
       Q2 -> pi - normalized
       Q3 -> normalized - pi
