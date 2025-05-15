@@ -2,8 +2,9 @@ module UnitCircle (getCoordinatesOnUnitCircle) where
 
 import Angle
 import AngleFunctions
+import Point
 import Types
 
-getCoordinatesOnUnitCircle :: Angle -> (Double, Double)
-getCoordinatesOnUnitCircle (Angle value InRadians) = (cos value, sin value)
-getCoordinatesOnUnitCircle (Angle value InDegrees) = (cos $ toRadians value, sin $ toRadians value)
+getCoordinatesOnUnitCircle :: Angle -> Point
+getCoordinatesOnUnitCircle (Angle value InRadians) = Point (cos value) (sin value)
+getCoordinatesOnUnitCircle (Angle value InDegrees) = Point (cos $ toRadians value) (sin $ toRadians value)
