@@ -4,6 +4,7 @@ import Angle
 import AngleFunctions
 import Point
 import Types
+import UnitCircle
 
 main :: IO ()
 main = do
@@ -19,3 +20,7 @@ main = do
   -- Angle data type leveraging Semigroup and Monoid for composition
   print (Angle (-90) InDegrees <> Angle 0 InRadians) -- should print ~4.71
   print (mconcat [Angle 90 InDegrees, Angle pi InRadians, Angle 270 InDegrees]) -- should print ~3.14 (pi)
+
+  -- Unit Circle
+  print (getCoordinatesOnUnitCircle (Angle 90 InDegrees))
+  print (getCoordinatesOnUnitCircle (Angle (3 * pi / 2) InRadians))

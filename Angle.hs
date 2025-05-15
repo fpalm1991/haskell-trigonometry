@@ -9,7 +9,7 @@ data Angle = Angle
   }
   deriving (Eq, Show)
 
--- Angle are always returned in radians
+-- Angles are always returned in radians
 instance Semigroup Angle where
   (<>) (Angle a1 u1) (Angle a2 u2)
     | u1 == InRadians && u2 == InRadians = Angle (normalizeAngle (a1 + a2) InRadians) InRadians
