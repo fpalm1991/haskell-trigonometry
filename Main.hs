@@ -2,6 +2,7 @@ module Main where
 
 import Angle
 import Point
+import TrigFunctions
 import Types
 import UnitCircle
 
@@ -15,7 +16,7 @@ main = do
   print (normalizeAngle (Angle (2 * pi + pi / 2) Radians)) -- should print ~1.57 (pi/2)
   print (getAllCoterminalAngles (4 * pi) Radians) -- shoud print 2 * pi
   print (determineQuadrantPoint (Point (-4) 4)) -- should print Q2 (Quadrant II)
-  print (determineQuadrantAngle (pi / 2) Radians) -- should print OnYAxis
+  print (determineQuadrantAngleFromValue (pi / 2) Radians) -- should print OnYAxis
   print (findReferenceAngle (-(pi / 4)) Radians) -- should print pi / 4
   print (findReferenceAngle 170 Degrees) -- should print 10
 
@@ -26,3 +27,7 @@ main = do
   -- Unit Circle
   print (getCoordinatesOnUnitCircle (Angle 90 Degrees))
   print (getCoordinatesOnUnitCircle (Angle (3 * pi / 2) Radians))
+
+  -- Trig Functions
+  print (tan' (Angle (pi / 4) Radians)) -- should print 1
+  print (csc' (Angle 360 Degrees)) -- should print "Nothing"

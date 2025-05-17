@@ -5,6 +5,7 @@ module Angle
     convertAngle,
     normalizeAngleFromValue,
     normalizeAngle,
+    determineQuadrantAngleFromValue,
     determineQuadrantAngle,
     findReferenceAngle,
     getAllCoterminalAngles,
@@ -84,44 +85,43 @@ determineQuadrantPoint point
 
 determineQuadrantAngleRadians :: Double -> Quadrant
 determineQuadrantAngleRadians radians
+  | radiansNormalized ~= 0 || radiansNormalized ~= pi || radiansNormalized ~= (2 * pi) = OnXAxis
+  | radiansNormalized ~= (pi / 2) || radiansNormalized ~= (3 / 2 * pi) = OnYAxis
   | radiansNormalized < pi / 2 = Q1
-  | radiansNormalized == pi / 2 = OnYAxis
   | radiansNormalized < pi = Q2
-  | radiansNormalized == pi = OnXAxis
-  | radiansNormalized < 3 / 2 * pi = Q3
-  | radiansNormalized == 3 / 2 * pi = OnYAxis
+  | radiansNormalized < (3 / 2 * pi) = Q3
   | radiansNormalized < 2 * pi = Q4
-  | radiansNormalized == 2 * pi = OnXAxis
   where
     radiansNormalized = normalizeAngleFromValue radians Radians
 
 determineQuadrantAngleDegrees :: Double -> Quadrant
 determineQuadrantAngleDegrees degrees
+  | degreesNormalized ~= 0 || degreesNormalized ~= 180 || degreesNormalized ~= 360 = OnXAxis
+  | degreesNormalized ~= 90 || degreesNormalized ~= 270 = OnYAxis
   | degreesNormalized < 90 = Q1
-  | degreesNormalized == 90 = OnYAxis
   | degreesNormalized < 180 = Q2
-  | degreesNormalized == 180 = OnXAxis
   | degreesNormalized < 270 = Q3
-  | degreesNormalized == 270 = OnYAxis
   | degreesNormalized < 360 = Q4
-  | degreesNormalized == 360 = OnXAxis
   where
     degreesNormalized = normalizeAngleFromValue degrees Degrees
 
-determineQuadrantAngle :: Double -> AngleType -> Quadrant
-determineQuadrantAngle angle angleType
+determineQuadrantAngleFromValue :: Double -> AngleType -> Quadrant
+determineQuadrantAngleFromValue angle angleType
   | angleType == Degrees = determineQuadrantAngleDegrees angle
   | angleType == Radians = determineQuadrantAngleRadians angle
 
+determineQuadrantAngle :: Angle -> Quadrant
+determineQuadrantAngle (Angle value unit) = determineQuadrantAngleFromValue value unit
+
 findReferenceAngle :: Double -> AngleType -> Double
 findReferenceAngle angle angleType
-  | angleType == Degrees = case determineQuadrantAngle angle angleType of
+  | angleType == Degrees = case determineQuadrantAngleFromValue angle angleType of
       Q1 -> normalized
       Q2 -> 180 - normalized
       Q3 -> normalized - 180
       Q4 -> 360 - normalized
       _ -> 0
-  | angleType == Radians = case determineQuadrantAngle angle angleType of
+  | angleType == Radians = case determineQuadrantAngleFromValue angle angleType of
       Q1 -> normalized
       Q2 -> pi - normalized
       Q3 -> normalized - pi
