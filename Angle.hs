@@ -44,8 +44,8 @@ toDegrees :: Double -> Double
 toDegrees radians = radians * (180 / pi)
 
 convertAngle :: Angle -> Angle
-convertAngle (Angle value Radians) = Angle (toRadians value) Degrees
-convertAngle (Angle value Degrees) = Angle (toDegrees value) Radians
+convertAngle (Angle value Radians) = Angle (toDegrees value) Degrees
+convertAngle (Angle value Degrees) = Angle (toRadians value) Radians
 
 -- Normalizes an angle to the range [0, 360) for degrees
 -- or [0, 2π) for radians, effectively removing full rotations.

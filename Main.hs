@@ -9,7 +9,9 @@ main :: IO ()
 main = do
   -- Basic Angle Functions
   print (toRadians 180) -- should print ~3.1415 (pi)
-  print (normalizeAngle (2 * pi + pi / 2) Radians) -- should print ~1.57
+  print (convertAngle (Angle 90 Degrees)) -- should print ~1.57 (pi/2)
+  print (convertAngle (Angle pi Radians)) -- should print 180
+  print (normalizeAngle (2 * pi + pi / 2) Radians) -- should print ~1.57 (pi/2)
   print (getAllCoterminalAngles (4 * pi) Radians) -- shoud print 2 * pi
   print (determineQuadrantPoint (Point (-4) 4)) -- should print Q2 (Quadrant II)
   print (determineQuadrantAngle (pi / 2) Radians) -- should print OnYAxis
