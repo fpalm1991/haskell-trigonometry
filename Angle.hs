@@ -3,6 +3,7 @@ module Angle
     toRadians,
     toDegrees,
     convertAngle,
+    normalizeAngleFromValue,
     normalizeAngle,
     determineQuadrantAngle,
     findReferenceAngle,
@@ -26,10 +27,10 @@ data Angle = Angle
 -- Angles are always returned in radians
 instance Semigroup Angle where
   (<>) (Angle a1 u1) (Angle a2 u2)
-    | u1 == Radians && u2 == Radians = Angle (normalizeAngle (a1 + a2) Radians) Radians
-    | u1 == Degrees && u2 == Radians = Angle (normalizeAngle (toRadians a1 + a2) Radians) Radians
-    | u1 == Radians && u2 == Degrees = Angle (normalizeAngle (a1 + toRadians a2) Radians) Radians
-    | u1 == Degrees && u2 == Degrees = Angle (normalizeAngle (toRadians a1 + toRadians a2) Radians) Radians
+    | u1 == Radians && u2 == Radians = Angle (normalizeAngleFromValue (a1 + a2) Radians) Radians
+    | u1 == Degrees && u2 == Radians = Angle (normalizeAngleFromValue (toRadians a1 + a2) Radians) Radians
+    | u1 == Radians && u2 == Degrees = Angle (normalizeAngleFromValue (a1 + toRadians a2) Radians) Radians
+    | u1 == Degrees && u2 == Degrees = Angle (normalizeAngleFromValue (toRadians a1 + toRadians a2) Radians) Radians
     | otherwise = error "Unsupported combination of angle units"
 
 instance Monoid Angle where
@@ -49,10 +50,13 @@ convertAngle (Angle value Degrees) = Angle (toRadians value) Radians
 
 -- Normalizes an angle to the range [0, 360) for degrees
 -- or [0, 2π) for radians, effectively removing full rotations.
-normalizeAngle :: Double -> AngleType -> Double
-normalizeAngle val angleType
+normalizeAngleFromValue :: Double -> AngleType -> Double
+normalizeAngleFromValue val angleType
   | angleType == Degrees = val `mod'` 360
   | angleType == Radians = val `mod'` (2 * pi)
+
+normalizeAngle :: Angle -> Angle
+normalizeAngle (Angle value unit) = Angle (normalizeAngleFromValue value unit) unit
 
 -- Given an angle in degrees or radians, this function returns all
 -- positive coterminal angles less than the absolute value of the input.
@@ -89,7 +93,7 @@ determineQuadrantAngleRadians radians
   | radiansNormalized < 2 * pi = Q4
   | radiansNormalized == 2 * pi = OnXAxis
   where
-    radiansNormalized = normalizeAngle radians Radians
+    radiansNormalized = normalizeAngleFromValue radians Radians
 
 determineQuadrantAngleDegrees :: Double -> Quadrant
 determineQuadrantAngleDegrees degrees
@@ -102,7 +106,7 @@ determineQuadrantAngleDegrees degrees
   | degreesNormalized < 360 = Q4
   | degreesNormalized == 360 = OnXAxis
   where
-    degreesNormalized = normalizeAngle degrees Degrees
+    degreesNormalized = normalizeAngleFromValue degrees Degrees
 
 determineQuadrantAngle :: Double -> AngleType -> Quadrant
 determineQuadrantAngle angle angleType
@@ -124,4 +128,4 @@ findReferenceAngle angle angleType
       Q4 -> 2 * pi - normalized
       _ -> 0
   where
-    normalized = normalizeAngle angle angleType
+    normalized = normalizeAngleFromValue angle angleType
