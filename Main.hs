@@ -2,6 +2,7 @@ module Main where
 
 import Angle
 import Point
+import RightTriangle
 import TrigFunctions
 import Types
 import UnitCircle
@@ -31,3 +32,6 @@ main = do
   -- Trig Functions
   print (tan' (Angle (pi / 4) Radians)) -- should print 1
   print (csc' (Angle 360 Degrees)) -- should print "Nothing"
+
+  -- Right Triangle
+  print (createFrom (Side 21 Hypotenuse) (Angle' (Angle 0.680678 Radians) AngleA))
