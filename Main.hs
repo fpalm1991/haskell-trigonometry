@@ -34,4 +34,6 @@ main = do
   print (csc' (Angle 360 Degrees)) -- should print "Nothing"
 
   -- Right Triangle
-  print (createFrom (Side 21 Hypotenuse) (Angle' (Angle 0.680678 Radians) AngleA))
+  print (createRightTriangleFrom (Side 21 Hypotenuse) (Angle' (Angle 25 Radians) NonRightAngle))
+  print (createRightTriangleFrom (Side 10 Opposite) (Angle' (Angle 30 Degrees) NonRightAngle))
+  print (createRightTriangleFrom (Side 8 Adjacent) (Angle' (Angle 45 Degrees) NonRightAngle))
