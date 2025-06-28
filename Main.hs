@@ -1,6 +1,7 @@
 module Main where
 
 import Angle
+import InverseTrigFunctions
 import Point
 import RightTriangle
 import TrigFunctions
@@ -37,3 +38,11 @@ main = do
   print (createRightTriangleFrom (Side 21 Hypotenuse) (Angle' (Angle 25 Radians) NonRightAngle))
   print (createRightTriangleFrom (Side 10 Opposite) (Angle' (Angle 30 Degrees) NonRightAngle))
   print (createRightTriangleFrom (Side 8 Adjacent) (Angle' (Angle 45 Degrees) NonRightAngle))
+
+  -- Inverse Trig Functions
+  print (arccos 0.52) -- should print 1.0239
+  case arccos 0.52 of
+    Nothing -> print "Input outside [-1, 1]"
+    Just angle -> do
+      print angle -- should print 1.0239
+      print $ determineQuadrantAngle angle -- should print Q1
