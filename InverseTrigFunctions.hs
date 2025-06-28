@@ -3,15 +3,15 @@ module InverseTrigFunctions (arcsin, arccos, arctan) where
 import Angle
 import Types
 
-arcsin :: Double -> Maybe Angle
+arcsin :: Double -> Either String Angle
 arcsin value
-  | -1 <= value && value <= 1 = Just $ Angle (asin value) Radians
-  | otherwise = Nothing
+  | -1 <= value && value <= 1 = Right $ Angle (asin value) Radians
+  | otherwise = Left "Input outside domain [-1, 1]"
 
-arccos :: Double -> Maybe Angle
+arccos :: Double -> Either String Angle
 arccos value
-  | -1 <= value && value <= 1 = Just $ Angle (acos value) Radians
-  | otherwise = Nothing
+  | -1 <= value && value <= 1 = Right $ Angle (acos value) Radians
+  | otherwise = Left "Input outside domain [-1, 1]"
 
-arctan :: Double -> Maybe Angle
-arctan value = Just $ Angle (atan value) Radians
+arctan :: Double -> Either String Angle
+arctan value = Right $ Angle (atan value) Radians

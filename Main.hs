@@ -42,7 +42,7 @@ main = do
   -- Inverse Trig Functions
   print (arccos 0.52) -- should print 1.0239
   case arccos 0.52 of
-    Nothing -> print "Input outside [-1, 1]"
-    Just angle -> do
+    Left err -> print err
+    Right angle -> do
       print angle -- should print 1.0239
       print $ determineQuadrantAngle angle -- should print Q1
