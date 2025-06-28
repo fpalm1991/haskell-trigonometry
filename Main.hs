@@ -40,7 +40,6 @@ main = do
   print (createRightTriangleFrom (Side 8 Adjacent) (Angle' (Angle 45 Degrees) NonRightAngle))
 
   -- Inverse Trig Functions
-  print (arccos 0.52) -- should print 1.0239
   case arccos 0.52 of
     Left err -> print err
     Right angle -> do
