@@ -38,6 +38,9 @@ main = do
   print (createRightTriangleFrom (Side 21 Hypotenuse) (Angle' (Angle 25 Radians) NonRightAngle))
   print (createRightTriangleFrom (Side 10 Opposite) (Angle' (Angle 30 Degrees) NonRightAngle))
   print (createRightTriangleFrom (Side 8 Adjacent) (Angle' (Angle 45 Degrees) NonRightAngle))
+  print (createRightTriangleFrom' (Side 7 Adjacent) (Side 8 Opposite))
+  print (createRightTriangleFrom' (Side 7 Adjacent) (Side 12 Hypotenuse))
+  print (createRightTriangleFrom' (Side 4 Opposite) (Side 12 Hypotenuse))
 
   -- Inverse Trig Functions
   case arccos 0.52 of

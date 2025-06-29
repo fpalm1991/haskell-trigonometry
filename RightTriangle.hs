@@ -1,6 +1,7 @@
-module RightTriangle (RightTriangle (..), Side (..), SideName (..), AngleName (..), Angle' (..), createRightTriangleFrom) where
+module RightTriangle (RightTriangle (..), Side (..), SideName (..), AngleName (..), Angle' (..), createRightTriangleFrom, createRightTriangleFrom') where
 
 import Angle
+import InverseTrigFunctions
 import TrigFunctions
 import Types
 
@@ -65,3 +66,32 @@ createRightTriangleFrom (Side sideValue Adjacent) (Angle' (Angle angleValue Degr
     angleC = Angle' (Angle 90 Degrees) RightAngle
     rightTriangle = RightTriangle adj opp hyp angleA angleB angleC
 createRightTriangleFrom (Side sideValue Adjacent) (Angle' (Angle angleValue Radians) NonRightAngle) = createRightTriangleFrom (Side sideValue Adjacent) (Angle' (convertAngle $ Angle angleValue Radians) NonRightAngle)
+
+createRightTriangleFrom' :: Side -> Side -> Maybe RightTriangle
+createRightTriangleFrom' adjacent@(Side adj Adjacent) opposite@(Side opp Opposite) = case arctan (opp / adj) of
+  Left err -> error err
+  Right angle ->
+    let hyp = sqrt $ adj ^ 2 + opp ^ 2
+        angleA = Angle' (convertAngle angle) NonRightAngle
+        angleB = Angle' (Angle (90 - value (convertAngle angle)) Degrees) NonRightAngle
+        angleC = Angle' (Angle 90 Degrees) RightAngle
+        rightTriangle = RightTriangle adjacent opposite (Side hyp Hypotenuse) angleA angleB angleC
+     in Just rightTriangle
+createRightTriangleFrom' adjacent@(Side adj Adjacent) hypotenuse@(Side hyp Hypotenuse) = case arccos (adj / hyp) of
+  Left err -> error err
+  Right θ ->
+    let opp = sqrt $ hyp ^ 2 - adj ^ 2
+        angleA = Angle' (convertAngle θ) NonRightAngle
+        angleB = Angle' (Angle (90 - value (convertAngle θ)) Degrees) NonRightAngle
+        angleC = Angle' (Angle 90 Degrees) RightAngle
+        rightTriangle = RightTriangle adjacent (Side opp Opposite) hypotenuse angleA angleB angleC
+     in Just rightTriangle
+createRightTriangleFrom' opposite@(Side opp Opposite) hypotenuse@(Side hyp Hypotenuse) = case arcsin (opp / hyp) of
+  Left err -> error err
+  Right θ ->
+    let adj = sqrt $ hyp ^ 2 - opp ^ 2
+        angleA = Angle' (convertAngle θ) NonRightAngle
+        angleB = Angle' (Angle (90 - value (convertAngle θ)) Degrees) NonRightAngle
+        angleC = Angle' (Angle 90 Degrees) RightAngle
+        rightTriangle = RightTriangle (Side adj Adjacent) opposite hypotenuse angleA angleB angleC
+     in Just rightTriangle
