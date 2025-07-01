@@ -5,8 +5,6 @@ import InverseTrigFunctions
 import TrigFunctions
 import Types
 
-data SideName = Adjacent | Opposite | Hypotenuse deriving (Show)
-
 data Side = Side
   { sideLength :: Double,
     sideName :: SideName
