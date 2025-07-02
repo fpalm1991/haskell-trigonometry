@@ -1,4 +1,4 @@
-module RightTriangle (RightTriangle (..), Side (..), SideName (..), AngleName (..), Angle' (..), createRightTriangleFrom, createRightTriangleFrom') where
+module RightTriangle (RightTriangle (..), Side (..), SideName (..), AngleName (..), Angle' (..), fromSideAngle, fromTwoSides, rightTriangle) where
 
 import Angle
 import InverseTrigFunctions
@@ -28,6 +28,18 @@ data RightTriangle = RightTriangle
     angleC :: Angle'
   }
   deriving (Show)
+
+data RightTriangleInput = FromTwoSides Side Side | FromSideAngle Side Angle' deriving (Show)
+
+fromSideAngle :: Side -> Angle' -> RightTriangleInput
+fromSideAngle = FromSideAngle
+
+fromTwoSides :: Side -> Side -> RightTriangleInput
+fromTwoSides = FromTwoSides
+
+rightTriangle :: RightTriangleInput -> Maybe RightTriangle
+rightTriangle (FromSideAngle s1 a1) = createRightTriangleFrom s1 a1
+rightTriangle (FromTwoSides s1 s2) = createRightTriangleFrom' s1 s2
 
 createRightTriangleFrom :: Side -> Angle' -> Maybe RightTriangle
 createRightTriangleFrom (Side sideValue Hypotenuse) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rightTriangle
