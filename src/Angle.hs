@@ -46,8 +46,8 @@ toDegrees :: Double -> Double
 toDegrees radians = radians * (180 / pi)
 
 convertAngle :: Angle -> Angle
-convertAngle (Angle value Radians) = Angle (toDegrees value) Degrees
-convertAngle (Angle value Degrees) = Angle (toRadians value) Radians
+convertAngle (Angle v Radians) = Angle (toDegrees v) Degrees
+convertAngle (Angle v Degrees) = Angle (toRadians v) Radians
 
 -- Normalizes an angle to the range [0, 360) for degrees
 -- or [0, 2π) for radians, effectively removing full rotations.
@@ -57,7 +57,7 @@ normalizeAngleFromValue val angleType
   | angleType == Radians = val `mod'` (2 * pi)
 
 normalizeAngle :: Angle -> Angle
-normalizeAngle (Angle value unit) = Angle (normalizeAngleFromValue value unit) unit
+normalizeAngle (Angle v u) = Angle (normalizeAngleFromValue v u) u
 
 -- Given an angle in degrees or radians, this function returns all
 -- positive coterminal angles less than the absolute value of the input.

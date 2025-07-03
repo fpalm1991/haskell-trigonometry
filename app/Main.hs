@@ -41,6 +41,6 @@ main = do
   -- Inverse Trig Functions
   case arccos 0.52 of
     Left err -> print err
-    Right angle -> do
-      print angle -- should print 1.0239
-      print $ determineQuadrantAngle angle -- should print Q1
+    Right θ -> do
+      print θ -- should print 1.0239
+      print $ determineQuadrantAngle θ -- should print Q1
