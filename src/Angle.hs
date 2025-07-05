@@ -113,19 +113,20 @@ determineQuadrantAngleFromValue angle angleType
 determineQuadrantAngle :: Angle -> Quadrant
 determineQuadrantAngle (Angle value unit) = determineQuadrantAngleFromValue value unit
 
-findReferenceAngle :: Double -> AngleType -> Double
+findReferenceAngle :: Double -> AngleType -> Maybe Angle
 findReferenceAngle angle angleType
   | angleType == Degrees = case determineQuadrantAngleFromValue angle angleType of
-      Q1 -> normalized
-      Q2 -> 180 - normalized
-      Q3 -> normalized - 180
-      Q4 -> 360 - normalized
-      _ -> 0
+      Q1 -> Just $ Angle normalized angleType
+      Q2 -> Just $ Angle (180 - normalized) angleType
+      Q3 -> Just $ Angle (normalized - 180) angleType
+      Q4 -> Just $ Angle (360 - normalized) angleType
+      _ -> Nothing
   | angleType == Radians = case determineQuadrantAngleFromValue angle angleType of
-      Q1 -> normalized
-      Q2 -> pi - normalized
-      Q3 -> normalized - pi
-      Q4 -> 2 * pi - normalized
-      _ -> 0
+      Q1 -> Just $ Angle normalized angleType
+      Q2 -> Just $ Angle (pi - normalized) angleType
+      Q3 -> Just $ Angle (normalized - pi) angleType
+      Q4 -> Just $ Angle (2 * pi - normalized) angleType
+      _ -> Nothing
+  | otherwise = Nothing
   where
     normalized = normalizeAngleFromValue angle angleType
