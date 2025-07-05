@@ -42,7 +42,7 @@ rightTriangle (FromSideAngle s1 a1) = createRightTriangleFrom s1 a1
 rightTriangle (FromTwoSides s1 s2) = createRightTriangleFrom' s1 s2
 
 createRightTriangleFrom :: Side -> Angle' -> Maybe RightTriangle
-createRightTriangleFrom (Side sideValue Hypotenuse) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rightTriangle
+createRightTriangleFrom (Side sideValue Hypotenuse) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rT
   where
     adj = Side (cos' (Angle angleValue Degrees) * sideValue) Adjacent
     opp = Side (sin' (Angle angleValue Degrees) * sideValue) Opposite
@@ -50,9 +50,9 @@ createRightTriangleFrom (Side sideValue Hypotenuse) (Angle' (Angle angleValue De
     angleA = Angle' (Angle angleValue Degrees) NonRightAngle
     angleB = Angle' (Angle (180 - 90 - angleValue) Degrees) NonRightAngle
     angleC = Angle' (Angle 90 Degrees) RightAngle
-    rightTriangle = RightTriangle adj opp hyp angleA angleB angleC
+    rT = RightTriangle adj opp hyp angleA angleB angleC
 createRightTriangleFrom (Side sideValue Hypotenuse) (Angle' (Angle angleValue Radians) NonRightAngle) = createRightTriangleFrom (Side sideValue Hypotenuse) (Angle' (convertAngle $ Angle angleValue Radians) NonRightAngle)
-createRightTriangleFrom (Side sideValue Opposite) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rightTriangle
+createRightTriangleFrom (Side sideValue Opposite) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rT
   where
     adj = case tan' (Angle angleValue Degrees) of
       Just t -> Side (t * sideValue) Adjacent
@@ -62,9 +62,9 @@ createRightTriangleFrom (Side sideValue Opposite) (Angle' (Angle angleValue Degr
     angleA = Angle' (Angle angleValue Degrees) NonRightAngle
     angleB = Angle' (Angle (180 - 90 - angleValue) Degrees) NonRightAngle
     angleC = Angle' (Angle 90 Degrees) RightAngle
-    rightTriangle = RightTriangle adj opp hyp angleA angleB angleC
+    rT = RightTriangle adj opp hyp angleA angleB angleC
 createRightTriangleFrom (Side sideValue Opposite) (Angle' (Angle angleValue Radians) NonRightAngle) = createRightTriangleFrom (Side sideValue Opposite) (Angle' (convertAngle $ Angle angleValue Radians) NonRightAngle)
-createRightTriangleFrom (Side sideValue Adjacent) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rightTriangle
+createRightTriangleFrom (Side sideValue Adjacent) (Angle' (Angle angleValue Degrees) NonRightAngle) = Just rT
   where
     adj = Side sideValue Adjacent
     opp = case tan' (Angle angleValue Degrees) of
@@ -74,34 +74,36 @@ createRightTriangleFrom (Side sideValue Adjacent) (Angle' (Angle angleValue Degr
     angleA = Angle' (Angle angleValue Degrees) NonRightAngle
     angleB = Angle' (Angle (180 - 90 - angleValue) Degrees) NonRightAngle
     angleC = Angle' (Angle 90 Degrees) RightAngle
-    rightTriangle = RightTriangle adj opp hyp angleA angleB angleC
+    rT = RightTriangle adj opp hyp angleA angleB angleC
 createRightTriangleFrom (Side sideValue Adjacent) (Angle' (Angle angleValue Radians) NonRightAngle) = createRightTriangleFrom (Side sideValue Adjacent) (Angle' (convertAngle $ Angle angleValue Radians) NonRightAngle)
+createRightTriangleFrom _ _ = error "No valid input."
 
 createRightTriangleFrom' :: Side -> Side -> Maybe RightTriangle
 createRightTriangleFrom' adjacent@(Side adj Adjacent) opposite@(Side opp Opposite) = case arctan (opp / adj) of
   Left err -> error err
   Right angle ->
-    let hyp = sqrt $ adj ^ 2 + opp ^ 2
+    let hyp = sqrt $ adj ^ (2 :: Integer) + opp ^ (2 :: Integer)
         angleA = Angle' (convertAngle angle) NonRightAngle
         angleB = Angle' (Angle (90 - value (convertAngle angle)) Degrees) NonRightAngle
         angleC = Angle' (Angle 90 Degrees) RightAngle
-        rightTriangle = RightTriangle adjacent opposite (Side hyp Hypotenuse) angleA angleB angleC
-     in Just rightTriangle
+        rT = RightTriangle adjacent opposite (Side hyp Hypotenuse) angleA angleB angleC
+     in Just rT
 createRightTriangleFrom' adjacent@(Side adj Adjacent) hypotenuse@(Side hyp Hypotenuse) = case arccos (adj / hyp) of
   Left err -> error err
   Right θ ->
-    let opp = sqrt $ hyp ^ 2 - adj ^ 2
+    let opp = sqrt $ hyp ^ (2 :: Integer) - adj ^ (2 :: Integer)
         angleA = Angle' (convertAngle θ) NonRightAngle
         angleB = Angle' (Angle (90 - value (convertAngle θ)) Degrees) NonRightAngle
         angleC = Angle' (Angle 90 Degrees) RightAngle
-        rightTriangle = RightTriangle adjacent (Side opp Opposite) hypotenuse angleA angleB angleC
-     in Just rightTriangle
+        rT = RightTriangle adjacent (Side opp Opposite) hypotenuse angleA angleB angleC
+     in Just rT
 createRightTriangleFrom' opposite@(Side opp Opposite) hypotenuse@(Side hyp Hypotenuse) = case arcsin (opp / hyp) of
   Left err -> error err
   Right θ ->
-    let adj = sqrt $ hyp ^ 2 - opp ^ 2
+    let adj = sqrt $ hyp ^ (2 :: Integer) - opp ^ (2 :: Integer)
         angleA = Angle' (convertAngle θ) NonRightAngle
         angleB = Angle' (Angle (90 - value (convertAngle θ)) Degrees) NonRightAngle
         angleC = Angle' (Angle 90 Degrees) RightAngle
-        rightTriangle = RightTriangle (Side adj Adjacent) opposite hypotenuse angleA angleB angleC
-     in Just rightTriangle
+        rT = RightTriangle (Side adj Adjacent) opposite hypotenuse angleA angleB angleC
+     in Just rT
+createRightTriangleFrom' _ _ = error "No valid input."

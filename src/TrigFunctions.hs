@@ -16,6 +16,7 @@ tan' (Angle value unit)
   | quadrant == OnYAxis = Nothing
   | unit == Radians = Just (tan value)
   | unit == Degrees = Just (tan $ toRadians value)
+  | otherwise = error "No valid angle."
   where
     quadrant = determineQuadrantAngle (Angle value unit)
 
@@ -24,6 +25,7 @@ sec' (Angle value unit)
   | quadrant == OnYAxis = Nothing
   | unit == Radians = Just (1 / cos value)
   | unit == Degrees = Just (1 / cos (toRadians value))
+  | otherwise = error "No valid angle."
   where
     quadrant = determineQuadrantAngle (Angle value unit)
 
@@ -32,6 +34,7 @@ csc' (Angle value unit)
   | quadrant == OnXAxis = Nothing
   | unit == Radians = Just (1 / sin value)
   | unit == Degrees = Just (1 / sin (toRadians value))
+  | otherwise = error "No valid angle."
   where
     quadrant = determineQuadrantAngle (Angle value unit)
 

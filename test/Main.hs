@@ -29,7 +29,7 @@ main = hspec $ do
       determineQuadrantAngle (Angle 5 Radians) `shouldBe` Q4
 
     it "finds the reference angle" $ do
-      findReferenceAngle (-(pi / 4)) Radians `shouldBe` Just (Angle (pi / 4) Radians)
+      findReferenceAngle (-(pi / 4)) Radians `shouldBe` Angle (pi / 4) Radians
 
     it "adds to angles using the Semigroup instance" $ do
       (Angle (-90) Degrees <> Angle (0.5 * pi) Radians) `shouldBe` Angle 0 Radians

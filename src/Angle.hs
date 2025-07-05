@@ -55,6 +55,7 @@ normalizeAngleFromValue :: Double -> AngleType -> Double
 normalizeAngleFromValue val angleType
   | angleType == Degrees = val `mod'` 360
   | angleType == Radians = val `mod'` (2 * pi)
+  | otherwise = error "No valid angle type."
 
 normalizeAngle :: Angle -> Angle
 normalizeAngle (Angle v u) = Angle (normalizeAngleFromValue v u) u
@@ -67,6 +68,7 @@ getAllCoterminalAngles :: Double -> AngleType -> [Double]
 getAllCoterminalAngles angle angleType
   | angleType == Degrees = reverse $ filter (\a -> a > 0 && a /= angleAbs) [angleAbs, angleAbs - 360 .. 0]
   | angleType == Radians = reverse $ filter (\a -> a > 0 && a /= angleAbs) [angleAbs, angleAbs - 2 * pi .. 0]
+  | otherwise = error "No valid angle type."
   where
     angleAbs = abs angle
 
@@ -79,6 +81,7 @@ determineQuadrantPoint point
   | x < 0 && y > 0 = Q2
   | x < 0 && y < 0 = Q3
   | x > 0 && y < 0 = Q4
+  | otherwise = error "No valid point."
   where
     x = getX point
     y = getY point
@@ -91,6 +94,7 @@ determineQuadrantAngleRadians radians
   | radiansNormalized < pi = Q2
   | radiansNormalized < (3 / 2 * pi) = Q3
   | radiansNormalized < 2 * pi = Q4
+  | otherwise = error "No valid degree value."
   where
     radiansNormalized = normalizeAngleFromValue radians Radians
 
@@ -102,6 +106,7 @@ determineQuadrantAngleDegrees degrees
   | degreesNormalized < 180 = Q2
   | degreesNormalized < 270 = Q3
   | degreesNormalized < 360 = Q4
+  | otherwise = error "No valid degree value."
   where
     degreesNormalized = normalizeAngleFromValue degrees Degrees
 
@@ -109,24 +114,25 @@ determineQuadrantAngleFromValue :: Double -> AngleType -> Quadrant
 determineQuadrantAngleFromValue angle angleType
   | angleType == Degrees = determineQuadrantAngleDegrees angle
   | angleType == Radians = determineQuadrantAngleRadians angle
+  | otherwise = error "No valid angle type."
 
 determineQuadrantAngle :: Angle -> Quadrant
 determineQuadrantAngle (Angle value unit) = determineQuadrantAngleFromValue value unit
 
-findReferenceAngle :: Double -> AngleType -> Maybe Angle
+findReferenceAngle :: Double -> AngleType -> Angle
 findReferenceAngle angle angleType
   | angleType == Degrees = case determineQuadrantAngleFromValue angle angleType of
-      Q1 -> Just $ Angle normalized angleType
-      Q2 -> Just $ Angle (180 - normalized) angleType
-      Q3 -> Just $ Angle (normalized - 180) angleType
-      Q4 -> Just $ Angle (360 - normalized) angleType
-      _ -> Nothing
+      Q1 -> Angle normalized angleType
+      Q2 -> Angle (180 - normalized) angleType
+      Q3 -> Angle (normalized - 180) angleType
+      Q4 -> Angle (360 - normalized) angleType
+      _ -> error "No valid quadrant."
   | angleType == Radians = case determineQuadrantAngleFromValue angle angleType of
-      Q1 -> Just $ Angle normalized angleType
-      Q2 -> Just $ Angle (pi - normalized) angleType
-      Q3 -> Just $ Angle (normalized - pi) angleType
-      Q4 -> Just $ Angle (2 * pi - normalized) angleType
-      _ -> Nothing
-  | otherwise = Nothing
+      Q1 -> Angle normalized angleType
+      Q2 -> Angle (pi - normalized) angleType
+      Q3 -> Angle (normalized - pi) angleType
+      Q4 -> Angle (2 * pi - normalized) angleType
+      _ -> error "No valid quadrant."
+  | otherwise = error "No valid angle type."
   where
     normalized = normalizeAngleFromValue angle angleType
