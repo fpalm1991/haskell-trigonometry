@@ -31,6 +31,9 @@ main = hspec $ do
     it "finds the reference angle" $ do
       findReferenceAngle (-(pi / 4)) Radians `shouldBe` Angle (pi / 4) Radians
 
+    it "finds the reference angle for angles greater than 2π" $ do
+      findReferenceAngle (8 * pi + (pi / 4)) Radians `shouldSatisfy` (\x -> abs (value x - (pi / 4)) <= epsilon)
+
     it "adds to angles using the Semigroup instance" $ do
       (Angle (-90) Degrees <> Angle (0.5 * pi) Radians) `shouldBe` Angle 0 Radians
 
