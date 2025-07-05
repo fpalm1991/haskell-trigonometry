@@ -1,6 +1,7 @@
 module Main (main) where
 
 import Angle
+import Formulas
 import InverseTrigFunctions
 import Point
 import Test.Hspec
@@ -59,3 +60,7 @@ main = hspec $ do
 
     it "calculates arctan" $ do
       arctan 1 `shouldBe` Right (Angle (pi / 4) Radians)
+
+  describe "Formulas" $ do
+    it "calculates missing side using pythagorean theorem" $ do
+      pythagoras (Adjacent, 3) (Opposite, 4) `shouldBe` Just (Hypotenuse, 5)
