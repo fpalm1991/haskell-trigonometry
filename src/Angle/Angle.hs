@@ -3,12 +3,13 @@ module Angle.Angle (Unit (..), Angle (..), convert, normalize) where
 import Data.Fixed as DF
 import Util.Functions
 
-data Unit = Radians | Degrees deriving (Show)
+data Unit = Radians | Degrees deriving (Eq, Show)
 
 data Angle = Angle
   { value :: Double,
     unit :: Unit
   }
+  deriving (Eq)
 
 instance Show Angle where
   show (Angle v Radians) = show v ++ " " ++ "rad"

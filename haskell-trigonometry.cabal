@@ -100,3 +100,4 @@ test-suite haskell-trigonometry-test
   build-depends:
     base ^>=4.18.3.0,
     haskell-trigonometry,
+    hspec ^>=2.10.0 && <3,
